@@ -7,33 +7,36 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            /* Fluz Style Tokens */
-            --color-money-max-black: #1a0000;
-            --color-canvas-white: #ffffff;
-            --color-mist-gray: #f2f2f2;
-            --color-sky-blue: #98bbf4;
-            --gradient-hero: linear-gradient(90deg, #82befe, #a6b4f7, #5bb89a, #21ba4c);
+            --color-money-max-black: #0d0d0d;
+            --color-canvas-white: #fafafa;
+            --color-mist-gray: #f4f4f6;
+            --color-sky-blue: #a3c4f3;
+            --color-subtle-ash: #6c6c72;
             
             --font-display: 'Bebas Neue', sans-serif;
             --font-body: 'Inter', sans-serif;
-            --page-max: 1750px;
+            --page-max: 1440px;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+        }
 
         body {
             background-color: var(--color-canvas-white);
             color: var(--color-money-max-black);
             font-family: var(--font-body);
             overflow-x: hidden;
-            background: #fff;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* --- CINEMATIC PARALLAX BACKGROUND --- */
+        /* --- HARDWARE ACCELERATED BACKGROUND --- */
         .parallax-bg {
             position: fixed;
             top: 0;
@@ -42,175 +45,240 @@
             height: 100%;
             z-index: -1;
             overflow: hidden;
-            background: radial-gradient(circle at 50% 50%, #f9f9f9, #ededec);
+            background: radial-gradient(circle at 50% 50%, #fcfcfc, #ebebeb);
         }
 
         .blob {
             position: absolute;
-            width: 600px;
-            height: 600px;
+            width: 650px;
+            height: 650px;
             background: var(--color-sky-blue);
-            filter: blur(120px);
+            filter: blur(140px);
             border-radius: 50%;
-            opacity: 0.4;
-            animation: drift 20s infinite alternate ease-in-out;
-        }
-
-        @keyframes drift {
-            from { transform: translate(-10%, -10%) scale(1); }
-            to { transform: translate(20%, 15%) scale(1.2); }
-        }
-
-        /* --- ENTRANCE GLARE --- */
-        body::after {
-            content: "";
-            position: fixed;
-            top: -150%;
-            left: -150%;
-            width: 300%;
-            height: 300%;
-            background: linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.8) 50%, transparent 55%);
-            z-index: 9999;
+            opacity: 0.35;
+            will-change: transform;
             pointer-events: none;
-            animation: initialGlare 1.5s cubic-bezier(0.19, 1, 0.22, 1) forwards;
         }
 
-        @keyframes initialGlare {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(50%, 50%); }
+        /* --- PERFORMANCE OPTIMIZED CURSOR --- */
+        .custom-cursor-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--color-money-max-black);
+            border-radius: 50%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 10000;
+            transform: translate(-50%, -50%);
         }
 
-        /* --- TYPOGRAPHY ANIMATION --- */
-        @keyframes textReveal {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
+        .custom-cursor-ring {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(13, 13, 13, 0.2);
+            border-radius: 50%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        /* Hide native cursor only on desktop devices that support hover mechanics */
+        @media (hover: hover) and (pointer: fine) {
+            body, a, button, .card {
+                cursor: none;
+            }
+        }
+        @media (max-width: 1024px) {
+            .custom-cursor-dot, .custom-cursor-ring { display: none; }
         }
 
         /* --- HERO --- */
         .hero {
-            min-height: 80vh;
+            min-height: 90vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 40px;
+            padding: 40px 20px;
+            position: relative;
         }
 
         .hero h1 {
             font-family: var(--font-display);
-            font-size: clamp(100px, 18vw, 240px);
+            font-size: clamp(100px, 20vw, 260px);
             line-height: 0.8;
-            letter-spacing: -0.03em;
-            margin-bottom: 20px;
-            animation: textReveal 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            letter-spacing: -0.02em;
+            margin-bottom: 24px;
+            opacity: 0;
         }
 
-        /* --- PRODUCT CARDS (GLASSMORPISM) --- */
+        .hero p {
+            font-weight: 700; 
+            color: var(--color-subtle-ash);
+            letter-spacing: 0.15em;
+            font-size: 14px;
+            text-transform: uppercase;
+            opacity: 0;
+        }
+
+        .hero .btn-pill {
+            margin-top: 40px;
+            opacity: 0;
+        }
+
+        /* --- 3D PRODUCT CARDS --- */
         .container {
             max-width: var(--page-max);
             margin: 0 auto;
-            padding: 80px 40px;
+            padding: 0 40px 120px 40px;
         }
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 40px;
+            perspective: 1200px; /* Essential framework for parent grid 3D space */
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 24px; /* Fluz Style Radius */
-            padding: 30px;
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 28px;
+            padding: 45px 35px;
             text-align: center;
-            transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
             position: relative;
             overflow: hidden;
+            opacity: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            
+            /* Enable absolute 3D rendering context */
+            transform-style: preserve-3d;
+            will-change: transform;
         }
 
-        .card:hover {
-            transform: translateY(-10px);
-            background: rgba(255, 255, 255, 0.8);
+        /* Interactive Dynamic Lighting Sheen Panel */
+        .card-sheen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 3;
+            mix-blend-mode: overlay;
+            border-radius: 28px;
         }
 
         .card-image-container {
             width: 100%;
-            aspect-ratio: 1/1;
+            aspect-ratio: 1 / 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 24px;
+            margin-bottom: 32px;
+            position: relative;
+            transform-style: preserve-3d;
         }
 
         .card-image-container img {
-            max-width: 90%;
-            max-height: 90%;
-            object-fit: contain; /* No cropping */
-            animation: starSpin 1.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1));
+            max-width: 85%;
+            max-height: 85%;
+            object-fit: contain;
+            filter: drop-shadow(0 15px 30px rgba(0,0,0,0.06));
+            
+            /* High structural Z-pop away from glass base layer */
+            transform: translateZ(50px);
+            will-change: transform;
+            transition: filter 0.3s ease;
         }
 
-        @keyframes starSpin {
-            0% { transform: rotate(-180deg) scale(0.5); opacity: 0; }
-            100% { transform: rotate(0deg) scale(1); opacity: 1; }
+        .card:hover .card-image-container img {
+            filter: drop-shadow(0 25px 45px rgba(0,0,0,0.12));
         }
 
-        /* --- STOCK & CTA --- */
+        /* --- CARD ACCENTS --- */
         .stock-tag {
             font-family: var(--font-display);
-            font-size: 24px;
+            font-size: 26px;
             color: var(--color-money-max-black);
-            margin-bottom: 15px;
-            opacity: 0.7;
+            margin-bottom: 24px;
+            opacity: 0.8;
+            letter-spacing: 0.03em;
+            transform: translateZ(30px);
         }
 
         .btn-pill {
             display: inline-block;
             background-color: var(--color-money-max-black);
             color: var(--color-canvas-white);
-            padding: 18px 48px;
-            border-radius: 200px; /* Pill shape required */
-            font-weight: 700;
+            padding: 16px 42px;
+            border-radius: 200px;
+            font-weight: 600;
             text-decoration: none;
             text-transform: uppercase;
-            font-size: 14px;
-            letter-spacing: 0.1em;
-            transition: all 0.3s ease;
+            font-size: 13px;
+            letter-spacing: 0.08em;
+            width: 100%;
+            max-width: 200px;
+            transform: translateZ(40px);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .btn-pill:hover {
-            background-color: #330000;
-            box-shadow: 0 10px 30px rgba(26, 0, 0, 0.2);
+        /* --- COMPONENT STATES --- */
+        .card.archived {
+            opacity: 0.35 !important;
+        }
+        
+        .card.archived .btn-pill {
+            background-color: transparent;
+            border: 1px solid var(--color-money-max-black);
+            color: var(--color-money-max-black);
+            pointer-events: none;
         }
 
         footer {
-            padding: 100px 40px;
+            padding: 80px 40px;
             text-align: center;
             font-family: var(--font-display);
-            letter-spacing: 0.2em;
-            opacity: 0.5;
+            font-size: 18px;
+            letter-spacing: 0.15em;
+            opacity: 0.4;
         }
     </style>
 </head>
 <body>
 
+    <!-- Target Anchors for Custom Cursor Manipulation -->
+    <div class="custom-cursor-dot"></div>
+    <div class="custom-cursor-ring"></div>
+
     <div class="parallax-bg">
-        <div class="blob" style="top: 10%; left: 10%;"></div>
-        <div class="blob" style="bottom: 10%; right: 10%; background: #5bb89a;"></div>
+        <div class="blob" id="blob-1" style="top: -10%; left: -10%;"></div>
+        <div class="blob" id="blob-2" style="bottom: -10%; right: -10%; background: #5bb89a;"></div>
     </div>
 
     <header class="hero">
-        <h1>DAPO<br>TRIBE</h1>
-        <p style="font-weight: 700; color: var(--color-subtle-ash);">PREMIUM PSYCHEDELIC STRUCTURES</p>
-        <a href="https://www.instagram.com/m/saahall___" class="btn-pill" style="margin-top: 40px;">Enter The Tribe</a>
+        <h1 id="hero-title">DAPO<br>TRIBE</h1>
+        <p id="hero-subtitle">Premium Psychedelic Structures</p>
+        <a href="https://www.instagram.com/m/saahall___" class="btn-pill" id="hero-btn">Enter The Tribe</a>
     </header>
 
     <main class="container">
         <div class="grid">
             <div class="card">
+                <div class="card-sheen"></div>
                 <div class="card-image-container">
                     <img src="checker-vortex.webp" alt="Dapo Star Pattern">
                 </div>
@@ -219,6 +287,7 @@
             </div>
 
             <div class="card">
+                <div class="card-sheen"></div>
                 <div class="card-image-container">
                     <img src="creature-spiral.webp" alt="Dapo Star Pattern">
                 </div>
@@ -227,6 +296,7 @@
             </div>
 
             <div class="card">
+                <div class="card-sheen"></div>
                 <div class="card-image-container">
                     <img src="mandala-purple.webp" alt="Dapo Star Pattern">
                 </div>
@@ -234,12 +304,13 @@
                 <a href="https://www.instagram.com/m/saahall___" class="btn-pill">Acquire</a>
             </div>
 
-            <div class="card">
+            <div class="card archived">
+                <div class="card-sheen"></div>
                 <div class="card-image-container">
                     <img src="neon-splatter.webp" alt="Dapo Star Pattern">
                 </div>
                 <div class="stock-tag">Sold Out</div>
-                <a href="https://www.instagram.com/m/saahall___" class="btn-pill" style="opacity: 0.5; pointer-events: none;">Archived</a>
+                <a href="https://www.instagram.com/m/saahall___" class="btn-pill">Archived</a>
             </div>
         </div>
     </main>
@@ -248,15 +319,136 @@
         <p>EST. 2026 — DAPO TRIBE — @saahall___</p>
     </footer>
 
+    <!-- GSAP Framework Base -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script>
-        // Subtle Parallax effect on mouse move
-        document.addEventListener('mousemove', (e) => {
-            const blobs = document.querySelectorAll('.blob');
-            const x = (window.innerWidth - e.pageX * 2) / 100;
-            const y = (window.innerHeight - e.pageY * 2) / 100;
+        window.addEventListener('DOMContentLoaded', () => {
+            
+            /* ==========================================================================
+               1. INTRO / ENTRANCE TIMELINE
+               ========================================================================== */
+            const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
+            
+            tl.to("#hero-title", { opacity: 1, y: 0, duration: 1.4, startAt: { y: 60 } })
+              .to("#hero-subtitle", { opacity: 1, y: 0, duration: 1, startAt: { y: 20 } }, "-=1.0")
+              .to("#hero-btn", { opacity: 1, y: 0, duration: 1, startAt: { y: 20 } }, "-=0.8")
+              .to(".card", { 
+                  opacity: (index, target) => target.classList.contains('archived') ? 0.35 : 1, 
+                  y: 0, 
+                  stagger: 0.12, 
+                  duration: 1.2, 
+                  startAt: { y: 60 } 
+              }, "-=0.6");
 
-            blobs.forEach(blob => {
-                blob.style.transform = `translate(${x}px, ${y}px)`;
+
+            /* ==========================================================================
+               2. HIGH-PERFORMANCE CUSTOM CURSOR TRAIL
+               ========================================================================== */
+            const dot = document.querySelector('.custom-cursor-dot');
+            const ring = document.querySelector('.custom-cursor-ring');
+            
+            // Allocate fast-caching GSAP quick setters for continuous frame tracking
+            const setDotX = gsap.quickTo(dot, "x", { duration: 0.08, ease: "power3.out" });
+            const setDotY = gsap.quickTo(dot, "y", { duration: 0.08, ease: "power3.out" });
+            const setRingX = gsap.quickTo(ring, "x", { duration: 0.25, ease: "power2.out" });
+            const setRingY = gsap.quickTo(ring, "y", { duration: 0.25, ease: "power2.out" });
+
+            window.addEventListener('mousemove', (e) => {
+                setDotX(e.clientX);
+                setDotY(e.clientY);
+                setRingX(e.clientX);
+                setRingY(e.clientY);
+
+                // Fluid background decorative blob tracking mechanics
+                const targetX = (e.clientX - window.innerWidth / 2) * 0.05;
+                const targetY = (e.clientY - window.innerHeight / 2) * 0.05;
+                gsap.to("#blob-1", { x: targetX, y: targetY, duration: 2, ease: "power2.out" });
+                gsap.to("#blob-2", { x: -targetX, y: -targetY, duration: 2, ease: "power2.out" });
+            });
+
+            // Interactive Cursor Expansion Target Rules
+            const interactiveSelectors = document.querySelectorAll('a, .card, .btn-pill');
+            interactiveSelectors.forEach(element => {
+                element.addEventListener('mouseenter', () => {
+                    ring.style.width = '65px';
+                    ring.style.height = '65px';
+                    ring.style.backgroundColor = 'rgba(13, 13, 13, 0.03)';
+                    ring.style.borderColor = 'rgba(13, 13, 13, 0.6)';
+                });
+                element.addEventListener('mouseleave', () => {
+                    ring.style.width = '40px';
+                    ring.style.height = '40px';
+                    ring.style.backgroundColor = 'transparent';
+                    ring.style.borderColor = 'rgba(13, 13, 13, 0.2)';
+                });
+            });
+
+
+            /* ==========================================================================
+               3. ADVANCED 3D SPATIAL TILT & DYNAMIC LIGHT MAPPING
+               ========================================================================== */
+            const cards = document.querySelectorAll('.card');
+            
+            cards.forEach(card => {
+                const sheen = card.querySelector('.card-sheen');
+                
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    // Identify center offset coordinates
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const deltaX = x - centerX;
+                    const deltaY = y - centerY;
+                    
+                    // Convert offsets into balanced perspective angles
+                    const rotationX = -(deltaY / centerY) * 12; // Maximum tilt: 12deg
+                    const rotationY = (deltaX / centerX) * 12;
+                    
+                    gsap.to(card, {
+                        rotateX: rotationX,
+                        rotateY: rotationY,
+                        transformPerspective: 1000,
+                        scale: 1.02,
+                        background: "rgba(255, 255, 255, 0.7)",
+                        boxShadow: "0 35px 70px rgba(0, 0, 0, 0.06)",
+                        duration: 0.3,
+                        ease: "power2.out"
+                    });
+
+                    // Map structural light sheen coordinates dynamically
+                    if (sheen) {
+                        const sheenPercentageX = (x / rect.width) * 100;
+                        const sheenPercentageY = (y / rect.height) * 100;
+                        gsap.to(sheen, {
+                            background: `radial-gradient(circle at ${sheenPercentageX}% ${sheenPercentageY}%, rgba(255,255,255,0.45) 0%, transparent 65%)`,
+                            duration: 0.2
+                        });
+                    }
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    // Smoothly ease standard defaults back into layout stream
+                    gsap.to(card, {
+                        rotateX: 0,
+                        rotateY: 0,
+                        scale: 1,
+                        background: "rgba(255, 255, 255, 0.45)",
+                        boxShadow: "0 0px 0px rgba(0, 0, 0, 0)",
+                        duration: 0.7,
+                        ease: "power3.out"
+                    });
+
+                    if (sheen) {
+                        gsap.to(sheen, {
+                            background: "radial-gradient(circle at 50% 50%, rgba(255,255,255,0) 0%, transparent 60%)",
+                            duration: 0.6,
+                            ease: "power3.out"
+                        });
+                    }
+                });
             });
         });
     </script>
